@@ -29,6 +29,11 @@ const router = createRouter({
           name: 'img_compress',
           component: () => import('@/views/ImgCompress.vue'),
         },
+        {
+          path: 'img_tools',
+          name: 'img_tools',
+          component: () => import('@/views/ImgTools.vue'),
+        },
       ],
     },
   ],

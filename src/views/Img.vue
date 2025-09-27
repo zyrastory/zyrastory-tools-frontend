@@ -64,7 +64,7 @@
 </script>
 
 <template>
-  <main>
+  <!-- <main> -->
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-11 card-light">
@@ -164,7 +164,7 @@
         </div>
       </div>
     </div>
-  </main>
+  <!-- </main> -->
 </template>
 
 

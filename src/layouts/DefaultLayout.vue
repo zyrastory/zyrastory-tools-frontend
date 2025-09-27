@@ -17,13 +17,13 @@ import Footer from '@/components/Footer.vue'
 main {
   /* footer 不會貼頭 */
   /* min-height: 100vh;   */
-  padding: 2rem;
+  padding: 1rem;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 73vh; 
-  min-height: 73dvh; 
+  min-height: 78vh; 
+  min-height: 78dvh; 
 }
 .whole{
   display: flex;

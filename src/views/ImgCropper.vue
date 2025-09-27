@@ -6,18 +6,19 @@
   import { useHead } from '@vueuse/head'
 
   useHead({
-    title: '線上圖片壓縮',
+    title: '線上圖片轉檔',
     meta: [
-      { name: 'description', content: '免費線上圖片壓縮 zyrastory tools' },
-      { property: 'og:title', content: '線上圖片壓縮' },
-      { property: 'og:description', content: '免費線上圖片壓縮 zyrastory tools' }
+      { name: 'description', content: '免費線上圖片轉檔 zyrastory tools' },
+      { property: 'og:title', content: '線上圖片轉檔' },
+      { property: 'og:description', content: '免費線上圖片轉檔 zyrastory tools' }
     ]
   })
 
-  const quality = ref(60)
+  const quality = ref(80)
   const imageRes = ref(null)
   const fileInput = ref(null)
   const loading = ref(false)
+  const format = ref("webp")
 
   async function uploadFiles(){
     const formData = new FormData()
@@ -40,7 +41,7 @@
        formData.append('upload_files', file) 
     }
 
-    formData.append('format_type', 'keep')
+    formData.append('format_type', format.value)
     formData.append('quality_value', quality.value)
 
     imageRes.value = null
@@ -63,24 +64,37 @@
 </script>
 
 <template>
-  <!-- <main> -->
+  <main>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-11 card-light">
-          <h1>線上圖片壓縮</h1>
+          <h1>線上圖片轉檔</h1>
           <br/>
 
+          <div class="format-options">
+            <label>轉換類型 : </label>
+            <label class="options-label" :class="{ active: format==='webp' }">
+              <input type="radio" value="webp" v-model="format" /> WebP
+            </label>
+            <label class="options-label" :class="{ active: format==='jpeg' }">
+              <input type="radio" value="jpeg" v-model="format" /> JPEG
+            </label>
+            <label class="options-label" :class="{ active: format==='png' }">
+              <input type="radio" value="png" v-model="format" /> PNG
+            </label>
+          </div>
+
           <div class="quality-row">
-            <label>壓縮品質 : </label>
+            <label>轉換品質 : </label>
             <br /><br />     
             <datalist id="tickmarks">
-              <option value="40"></option>
-              <option value="50"></option>
               <option value="60"></option>
               <option value="70"></option>
               <option value="80"></option>
+              <option value="90"></option>
+              <option value="100"></option>
             </datalist>
-            <input type="range" v-model="quality" min="40" max="80" step="5"  list="tickmarks" />
+            <input type="range" v-model="quality" min="60" max="100" step="5"  list="tickmarks" />
             <span class="quality-label">{{ quality }}%</span>
           </div>
           <br />
@@ -88,8 +102,8 @@
             <div>
               <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
               注意事項
-              <br />
-              <br />
+              <br />一般來說圖片大小 PNG>JPEG>WEBP
+              <br />LINE不支援WEBP類型，推薦轉為JPEG
               <br />
               <br />此功能最多一次上傳五張圖片，單張大小不大於5MB
             </div>
@@ -107,7 +121,7 @@
               spin-pulse  size="4x"/>
 
           <div v-if="imageRes!=null" style="overflow-x: auto;">
-            <h2>壓縮後的圖片</h2>
+            <h2>轉換後的圖片</h2>
             <br/>
             <table>
               <colgroup>
@@ -121,8 +135,8 @@
               <thead>
                 <tr>
                   <th>檔名</th>
-                  <th>壓縮前大小</th>
-                  <th>壓縮後大小</th>
+                  <th>轉檔前大小</th>
+                  <th>轉檔後大小</th>
                   <th>壓縮比(%)</th>
                   <th>下載</th>
                 </tr>
@@ -150,7 +164,7 @@
         </div>
       </div>
     </div>
-  <!-- </main> -->
+  </main>
 </template>
 
 
@@ -176,6 +190,31 @@ h1 {
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #4A3F35; /* 深咖啡，莫蘭迪感 */
+}
+
+.format-options {
+  display: flex;
+  align-items: center;   /* 垂直置中 */
+  margin: 0 auto 1rem auto; 
+  width: 60%;
+
+  display: flex;
+  gap: 12px;
+}
+.options-label {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.options-label.active {
+  background: #A366FF;
+  color: white;
+  border-color: #A366FF;
+}
+.format-options input {
+  display: none;
 }
 
 .quality-row {

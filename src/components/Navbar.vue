@@ -6,6 +6,7 @@
     <RouterLink to="/img_tool">圖片工具</RouterLink>
 
     <RouterLink to="/img_compress">圖片壓縮</RouterLink>
+    <RouterLink to="/img_tools">圖片工具集</RouterLink>
     
   </nav>
 </template>
@@ -18,7 +19,7 @@
   align-items: center;
   justify-content: center;
   gap: 5rem;
-  padding: 1rem;
+  padding: 5px 1rem;
 
   background: var(--color-navbar-bg, #6d5e5e);
 }
