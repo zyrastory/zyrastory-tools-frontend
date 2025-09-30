@@ -7,10 +7,18 @@
   font-weight: normal;
 } */
 
-html, body {
+html  body {
   margin: 0;
   padding: 0;;
   width: 100%;
+
+  overflow-y: scroll;
+}
+
+/* 隱藏scroll bar 但仍可下拉*/
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  width: 0px;  /* 對 WebKit/Chrome/Safari */
+  background: transparent;
 }
 
 #app {
@@ -22,7 +30,7 @@ html, body {
 .card-light {
   background: #f4f1ef; 
   color: #555;
-  padding: 5rem;
+  padding: 3rem 5rem; /* 前上下 後左右 */
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   text-align: center;

@@ -3,9 +3,9 @@
     <img src="@/assets/logo_1.0.png" alt="Logo" class="logo" />
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/about">About</RouterLink>
-    <RouterLink to="/img_tool">圖片工具</RouterLink>
-
+    <RouterLink to="/img_convert">圖片工具</RouterLink>
     <RouterLink to="/img_compress">圖片壓縮</RouterLink>
+    <RouterLink to="/img_cropper">圖片裁切</RouterLink>
     <RouterLink to="/img_tools">圖片工具集</RouterLink>
     
   </nav>

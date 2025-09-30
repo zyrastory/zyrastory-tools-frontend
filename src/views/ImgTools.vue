@@ -1,21 +1,55 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import type { TabsPaneContext } from 'element-plus'
 
-import ImgConvert from './Img.vue'
-import ImageCompress from './ImgCompress.vue'
+import ImgConvert from './ImgConvert.vue'
+import ImgCompress from './ImgCompress.vue'
+import ImgCropper from './ImgCropper.vue'
 
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
+import { useHead } from "@vueuse/head";
+watch(activeName, (val) => {
+  let title = "工具箱";
+  let meta = [];
+  if (val === "first"){
+    title = '線上圖片轉檔'
+    meta = [
+      { name: 'description', content: '免費線上圖片轉檔 zyrastory tools' },
+      { property: 'og:title', content: '線上圖片轉檔' },
+      { property: 'og:description', content: '免費線上圖片轉檔 zyrastory tools' }
+    ]
+  }
+  if (val === "second"){
+    title = '線上圖片壓縮'
+    meta = [
+      { name: 'description', content: '免費線上圖片壓縮 zyrastory tools' },
+      { property: 'og:title', content: '線上圖片壓縮' },
+      { property: 'og:description', content: '免費線上圖片壓縮 zyrastory tools' }
+    ]
+  }
+  if (val === "third"){
+    title = '線上圖片裁切(指定證照大小)'
+    meta = [
+      { name: 'description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' },
+      { property: 'og:title', content: '線上圖片裁切儲存' },
+      { property: 'og:description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' }
+    ]
+
+  }
+  useHead({ title:title,meta:meta });
+}, { immediate: true });
+
 </script>
 
 
 <template>
-  <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick" type="border-card">
+  <!-- <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick" type="border-card"> -->
+  <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
     <el-tab-pane label="圖片轉檔" name="first">
       <div class="custom-tab-content">
         <ImgConvert />
@@ -23,10 +57,14 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     </el-tab-pane>
     <el-tab-pane label="圖片壓縮" name="second">
       <div class="custom-tab-content">
-       <ImageCompress />
+       <ImgCompress />
       </div>
     </el-tab-pane>
-    <el-tab-pane label="證照裁切" name="third">待辦</el-tab-pane>
+    <el-tab-pane label="證照裁切" name="third">
+      <div class="custom-tab-content">
+       <ImgCropper />
+      </div>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -39,13 +77,13 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   font-size: 32px;
   font-weight: 600; */  
   flex: 1;             /* 自動撐滿剩餘空間 */
-  overflow-y: auto;    /* 內容多時滾動 */
+  /* 內容多時滾動 */
+  /* overflow-y: auto;     */
 }
 
 .custom-tab-content{
   display: flex;
   justify-content: center; /* 水平置中 */
-  text-align: center;  /* 水平置中 */
 }
 
 .el-tab-pane>.main{

@@ -20,14 +20,19 @@ const router = createRouter({
           component: () => import('@/views/AboutView.vue'),
         },
         {
-          path: 'img_tool',
-          name: 'img_tool',
-          component: () => import('@/views/Img.vue'),
+          path: 'img_convert',
+          name: 'img_convert',
+          component: () => import('@/views/ImgConvert.vue'),
         },
         {
           path: 'img_compress',
           name: 'img_compress',
           component: () => import('@/views/ImgCompress.vue'),
+        },
+        {
+          path: 'img_cropper',
+          name: 'img_cropper',
+          component: () => import('@/views/ImgCropper.vue'),
         },
         {
           path: 'img_tools',

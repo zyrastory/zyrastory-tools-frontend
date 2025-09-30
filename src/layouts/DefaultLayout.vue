@@ -21,14 +21,14 @@ main {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   min-height: 78vh; 
   min-height: 78dvh; 
+
 }
 .whole{
   display: flex;
   flex-direction: column;
   height: 100%;
 } 
-
 </style>
