@@ -71,22 +71,23 @@
           <h1>線上圖片轉檔</h1>
           <br/>
 
-          <div class="format-options">
+          <div class="format-row">
             <label>轉換類型 : </label>
-            <label class="options-label" :class="{ active: format==='webp' }">
-              <input type="radio" value="webp" v-model="format" /> WebP
-            </label>
-            <label class="options-label" :class="{ active: format==='jpeg' }">
-              <input type="radio" value="jpeg" v-model="format" /> JPEG
-            </label>
-            <label class="options-label" :class="{ active: format==='png' }">
-              <input type="radio" value="png" v-model="format" /> PNG
-            </label>
+            <div class="format-buttons">
+              <label class="options-label" :class="{ active: format==='webp' }">
+                <input type="radio" value="webp" v-model="format" /> WebP
+              </label>
+              <label class="options-label" :class="{ active: format==='jpeg' }">
+                <input type="radio" value="jpeg" v-model="format" /> JPEG
+              </label>
+              <label class="options-label" :class="{ active: format==='png' }">
+                <input type="radio" value="png" v-model="format" /> PNG
+              </label>
+            </div>
           </div>
 
           <div class="quality-row">
             <label>轉換品質 : </label>
-            <br /><br />     
             <datalist id="tickmarks">
               <option value="60"></option>
               <option value="70"></option>
@@ -169,22 +170,6 @@
 
 
 <style scoped>
-/*
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; 
-   background: #f3f0ed; 
-}
-*/
-
-.container {
-  max-width: 800px;
-  min-width: 250px;
-  width: 80%;
-  
-}
 
 h1 {
   font-size: 1.8rem;
@@ -193,15 +178,26 @@ h1 {
   color: #4A3F35; /* 深咖啡，莫蘭迪感 */
 }
 
-.format-options {
+.format-row {
   display: flex;
   align-items: center;   /* 垂直置中 */
   margin: 0 auto 1rem auto; 
   width: 60%;
 
-  display: flex;
   gap: 12px;
 }
+/* 防止radio出現 */
+.format-row input {
+  display: none;
+}
+
+.format-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+
 .options-label {
   padding: 6px 12px;
   border: 1px solid #ccc;
@@ -213,9 +209,6 @@ h1 {
   background: #A366FF;
   color: white;
   border-color: #A366FF;
-}
-.format-options input {
-  display: none;
 }
 
 .quality-row {
@@ -234,7 +227,7 @@ h1 {
   /* color: #555; */
 }
 
-.format-options label:first-child,
+.format-row > label:first-child,
 .quality-row label {
   display: inline-block;  /* 讓 width 生效 */
   width: 100px;           /* 左側統一寬度 */
@@ -255,6 +248,14 @@ h1 {
   font-weight: 500;
   min-width: 40px;       /* 避免太窄 */
   text-align: right;     /* 對齊百分比 */
+}
+
+@media (max-width: 768px) {
+  /* 手機板強制換行 */
+  .format-row, .quality-row {
+    flex-direction: column;
+    width: 90%;
+  }
 }
 
 

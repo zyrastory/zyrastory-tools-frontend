@@ -71,8 +71,7 @@
           <br/>
 
           <div class="quality-row">
-            <label>壓縮品質 : </label>
-            <br /><br />     
+            <label>壓縮品質 : </label>   
             <datalist id="tickmarks">
               <option value="40"></option>
               <option value="50"></option>
@@ -155,21 +154,6 @@
 
 
 <style scoped>
-/*
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; 
-   background: #f3f0ed; 
-}
-*/
-
-.container {
-  max-width: 800px;
-  min-width: 250px;
-  width: 80%;
-}
 
 h1 {
   font-size: 1.8rem;
@@ -194,7 +178,6 @@ h1 {
   /* color: #555; */
 }
 
-.format-options label:first-child,
 .quality-row label {
   display: inline-block;  /* 讓 width 生效 */
   width: 100px;           /* 左側統一寬度 */
@@ -215,6 +198,14 @@ h1 {
   font-weight: 500;
   min-width: 40px;       /* 避免太窄 */
   text-align: right;     /* 對齊百分比 */
+}
+
+@media (max-width: 768px) {
+  /* 手機板強制換行 */
+  .quality-row {
+    flex-direction: column;
+    width: 90%;
+  }
 }
 
 

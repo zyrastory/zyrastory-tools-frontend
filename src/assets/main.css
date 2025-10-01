@@ -27,6 +27,12 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
   min-height: 100dvh;
 }
 
+.container {
+  max-width: 900px;
+  min-width: 300px;
+  width: 80%;
+}
+
 .card-light {
   background: #f4f1ef; 
   color: #555;
@@ -34,6 +40,13 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   text-align: center;
+}
+
+/* 手機大致 */
+@media (max-width: 768px) {
+  .card-light {
+    padding: 0.5rem 1rem;
+  }
 }
 
 

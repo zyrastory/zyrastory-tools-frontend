@@ -158,12 +158,6 @@ function onFileChange(e) {
   color: #180808;
 }
 
-.container {
-  max-width: 800px;
-  min-width: 250px;
-  width: 80%;
-}
-
 h1 {
   font-size: 1.8rem;
   font-weight: 600;

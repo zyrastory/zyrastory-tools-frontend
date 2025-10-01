@@ -113,4 +113,17 @@ watch(activeName, (val) => {
 }
 
 
+/* 手機tabs 相關 */
+@media (max-width: 768px) {
+  .tabs {
+    width: 90%;
+  }
+
+  .el-tabs__item{
+    font-size: 16px;
+    padding: 12px 24px;  /* 前上下 後左右 */
+
+  }
+}
+
 </style>
