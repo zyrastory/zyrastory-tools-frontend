@@ -24,9 +24,13 @@
 
     const files = fileInput.value.files
 
-    if (files.length > 5) {
-      alert('最多只能上傳 5 張圖片')
-      return
+    if(files.length === 0){
+      alert('請選擇圖片上傳');
+      return;
+    }
+    else if (files.length > 5) {
+      alert('最多只能上傳 5 張圖片');
+      return;
     }
     for (let file of files) {
       if(!file.type.startsWith('image/')){
