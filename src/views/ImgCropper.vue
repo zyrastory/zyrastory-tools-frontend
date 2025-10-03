@@ -39,7 +39,18 @@
         </div>
 
         <el-button size="large" type="success" @click="uploadFiles">裁切圖片</el-button>
-        <!-- <button @click="uploadFiles" class="btn btn-primary" value="上傳圖片">上傳圖片</button> -->
+        
+        <br />
+        <br />
+        <br />
+        <div class="alert alert-info mt-3">
+          <div>
+            <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
+            注意事項
+            <br /> 裁切圖檔為jpg檔
+            <br /> 當前若有轉換需求請至轉換頁處理
+          </div>
+        </div>
 
 
       </div>
@@ -86,19 +97,19 @@ function cardClick(item) {
 
 function uploadFiles(){
   const canvas = cropper.getCroppedCanvas({
-  width: currentItem.value.width*300/2.54,  // 可選：指定輸出寬度
-  height: currentItem.value.height * 300 / 2.54
-});
+    width: currentItem.value.width*300/2.54,  // 可選：指定輸出寬度
+    height: currentItem.value.height * 300 / 2.54
+  });
 
 console.log(currentItem.value.width*300/2.54);
 canvas.toBlob((blob) => {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'cropped-image.jpg';
-  a.click();
-  URL.revokeObjectURL(url);
-}, 'image/jpg');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cropped-image.jpg';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, 'image/jpg');
 }
 
 function onFileChange(e) {
@@ -181,10 +192,42 @@ h1 {
 
 }
 
+@media (max-width: 768px) {
+  /* 手機版調整比例 */
+  .img-box{
+    margin: 14px 4px;
+    border: solid 1px #ddd;
+    max-width: 95%;
+    max-height: 100%;
+  }
+
+  .cropper-container {
+    max-width: 95%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+}
+
 .cropper-div{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+.alert {
+  padding: 10px 14px;
+  margin:auto;
+  border: 1px dashed #aaa;   /* 淡灰色虛線邊框 */
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+
+  width: 60%;
+}
+
+.alert-icon {
+  margin-top: 5px;
 }
 
 </style>

@@ -88,8 +88,6 @@
               <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
               注意事項
               <br />
-              <br />
-              <br />
               <br />此功能最多一次上傳五張圖片，單張大小不大於5MB
             </div>
           </div>
