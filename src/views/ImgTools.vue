@@ -1,70 +1,34 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import type { TabsPaneContext } from 'element-plus'
 
-import ImgConvert from './ImgConvert.vue'
-import ImgCompress from './ImgCompress.vue'
-import ImgCropper from './ImgCropper.vue'
 
 const activeName = ref('first')
+const route = useRoute()
+const router = useRouter()
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
+function onTabChange(tabPane) {
+  router.push({ name: tabPane.paneName })
 }
-import { useHead } from "@vueuse/head";
-watch(activeName, (val) => {
-  let title = "工具箱";
-  let meta = [];
-  if (val === "first"){
-    title = '線上圖片轉檔'
-    meta = [
-      { name: 'description', content: '免費線上圖片轉檔 zyrastory tools' },
-      { property: 'og:title', content: '線上圖片轉檔' },
-      { property: 'og:description', content: '免費線上圖片轉檔 zyrastory tools' }
-    ]
-  }
-  if (val === "second"){
-    title = '線上圖片壓縮'
-    meta = [
-      { name: 'description', content: '免費線上圖片壓縮 zyrastory tools' },
-      { property: 'og:title', content: '線上圖片壓縮' },
-      { property: 'og:description', content: '免費線上圖片壓縮 zyrastory tools' }
-    ]
-  }
-  if (val === "third"){
-    title = '線上圖片裁切(指定證照大小)'
-    meta = [
-      { name: 'description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' },
-      { property: 'og:title', content: '線上圖片裁切儲存' },
-      { property: 'og:description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' }
-    ]
-
-  }
-  useHead({ title:title,meta:meta });
-}, { immediate: true });
-
 </script>
 
 
 <template>
   <!-- <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick" type="border-card"> -->
-  <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
-    <el-tab-pane label="圖片轉檔" name="first">
-      <div class="custom-tab-content">
-        <ImgConvert />
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="圖片壓縮" name="second">
-      <div class="custom-tab-content">
-       <ImgCompress />
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="證照裁切" name="third">
-      <div class="custom-tab-content">
-       <ImgCropper />
-      </div>
-    </el-tab-pane>
+  <el-tabs v-model="activeName" class="tabs" @tab-click="onTabChange">
+    <el-tab-pane label="圖片轉檔" name="convert" />
+    <el-tab-pane label="圖片壓縮" name="compress" />
+    <el-tab-pane label="圖片裁切" name="cropper" />
+
+    <div class="custom-tab-content">
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+  </div>
   </el-tabs>
 </template>
 

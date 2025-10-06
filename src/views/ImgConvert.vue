@@ -3,16 +3,16 @@
   import axios from 'axios'
 
 
-  // import { useHead } from '@vueuse/head'
+  import { useHead } from '@vueuse/head'
 
-  // useHead({
-  //   title: '線上圖片轉檔',
-  //   meta: [
-  //     { name: 'description', content: '免費線上圖片轉檔 zyrastory tools' },
-  //     { property: 'og:title', content: '線上圖片轉檔' },
-  //     { property: 'og:description', content: '免費線上圖片轉檔 zyrastory tools' }
-  //   ]
-  // })
+  useHead({
+    title: '線上圖片轉檔',
+    meta: [
+      { name: 'description', content: '免費線上圖片轉檔 zyrastory tools' },
+      { property: 'og:title', content: '線上圖片轉檔' },
+      { property: 'og:description', content: '免費線上圖片轉檔 zyrastory tools' }
+    ]
+  })
 
   const quality = ref(80)
   const imageRes = ref(null)

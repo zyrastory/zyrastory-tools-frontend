@@ -19,6 +19,7 @@ const router = createRouter({
           name: 'about',
           component: () => import('@/views/AboutView.vue'),
         },
+        /*
         {
           path: 'img_convert',
           name: 'img_convert',
@@ -34,10 +35,29 @@ const router = createRouter({
           name: 'img_cropper',
           component: () => import('@/views/ImgCropper.vue'),
         },
+        */
         {
           path: 'img_tools',
           name: 'img_tools',
+          redirect: '/img_tools/convert', //預設走第一頁
           component: () => import('@/views/ImgTools.vue'),
+           children: [
+              {
+                path: 'convert',
+                name: 'convert',
+                component: () => import('@/views/ImgConvert.vue'),
+              },
+              {
+                path: 'compress',
+                name: 'compress',
+                component: () => import('@/views/ImgCompress.vue'),
+              },
+              {
+                path: 'cropper',
+                name: 'cropper',
+                component: () => import('@/views/ImgCropper.vue'),
+              },
+          ]
         },
       ],
     },

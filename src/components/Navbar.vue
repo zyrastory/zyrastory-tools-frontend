@@ -6,7 +6,7 @@
     <!-- <RouterLink to="/img_convert">圖片工具</RouterLink>
     <RouterLink to="/img_compress">圖片壓縮</RouterLink>
     <RouterLink to="/img_cropper">圖片裁切</RouterLink> -->
-    <RouterLink to="/img_tools">圖片工具集</RouterLink>
+    <RouterLink to="/img_tools"  :class="{ 'router-link-exact-active': $route.path.startsWith('/img_tools') }" >圖片工具集</RouterLink>
     
   </nav>
 </template>

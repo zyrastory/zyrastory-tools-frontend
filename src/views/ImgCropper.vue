@@ -65,6 +65,17 @@ import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 
+import { useHead } from '@vueuse/head'
+
+useHead({
+  title: '線上圖片裁切',
+  meta: [
+    { name: 'description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' },
+    { property: 'og:title', content: '線上圖片裁切儲存' },
+    { property: 'og:description', content: '免費線上圖片裁切(指定證照大小) zyrastory tools' }
+  ]
+})
+
 const selectedSize = ref("taiwan");
 const options = [
   { value: "taiwan", label: "台灣身分證\r\n台灣健保卡\r\n中國台胞證", size: "3.5cm × 4.5cm", memo: "大小不得超過 5 MB" ,width:3.5, height:4.5 },
