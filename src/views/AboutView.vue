@@ -25,8 +25,9 @@ onBeforeUnmount(() => {
         <el-card class="mb-4">
           <h2>基本介紹</h2>
           <p>工程師撰寫的小工具，練練手順便解決平常的問題</p>
+          <p>前端採用Vue.JS框架，後端則是Python進行串接</p>
           <br/>
-          <p>技術類文章請前往主網域 ➡ <a href="https://zyrastory.com">zyrastory.com</a></p>
+          <p>技術類文章請前往主網域 ➡ <a href="https://zyrastory.com" style="font-size: 20px;">zyrastory.com</a></p>
           <p>裡面與朋友一起紀錄了一些程式教學、弱點掃描、美食(?)的文章</p>
         </el-card>
 
