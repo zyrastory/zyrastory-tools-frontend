@@ -53,7 +53,7 @@
     imageRes.value = null
     loading.value = true;
     try {
-      const response = await axios.post('http://localhost:8000/api/tools/image_tool/upload', formData)
+      const response = await axios.post('/api/tools/image_tool/upload', formData)
       loading.value = false;
       imageRes.value = response.data;
 
@@ -65,7 +65,7 @@
   }
 
   function downloadAll(url){
-    window.open('http://localhost:8000/api/tools/image_tool/'+url, '_blank')
+    window.open('/api/tools/image_tool/'+url, '_blank')
   }
 </script>
 
@@ -155,7 +155,7 @@
                   <td >{{item.new_size_str }}</td>
                   <td >{{item.ratio }}</td>
                   <td> 
-                    <a :href="`http://localhost:8000/api/tools/image_tool/${imageRes.download_url}/${item.filename}`" target="_blank">
+                    <a :href="`/api/tools/image_tool/${imageRes.download_url}/${item.filename}`" target="_blank">
                       <font-awesome-icon icon="fa-solid fa-circle-down" />
                     </a>
                   </td>
