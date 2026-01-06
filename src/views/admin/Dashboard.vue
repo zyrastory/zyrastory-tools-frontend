@@ -6,7 +6,19 @@
           <el-col :xs="24" :sm="8"  class="dashboard-col">
             <el-card>
               <el-statistic :value="stats.totalMemes">
-                <template #title>梗圖總數</template>
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    <span>梗圖總數</span>
+                    <el-link 
+                      type="primary" 
+                      :underline="false" 
+                      style="margin-left: 8px; font-size: 12px;" 
+                      @click="$router.push({ name: 'admin-memes' })"
+                    >
+                      管理
+                    </el-link>
+                  </div>
+                </template>
               </el-statistic>
             </el-card>
           </el-col>
