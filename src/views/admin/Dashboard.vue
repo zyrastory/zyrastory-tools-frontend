@@ -68,6 +68,7 @@
                       <div
                         v-for="detail in page"
                         class="tag-count-card"
+                        @click="handleTagClick(detail.tag_name)"
                       >
                         <div class="seq">{{ detail.seq }}</div>
                         <div class="tag-name">{{ detail.tag_name }}</div>
@@ -151,6 +152,16 @@ const hotKeywords = [
   { keyword: '崩潰', count: 198 },
   { keyword: '海綿寶寶', count: 165 },
 ]
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const handleTagClick = (tagName) => {
+  router.push({ 
+    name: 'admin-memes', 
+    query: { tag: tagName } 
+  })
+}
 </script>
 
 <style scoped>
@@ -190,6 +201,12 @@ const hotKeywords = [
   justify-content: space-between;
   padding: 12px 16px;
   border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tag-count-card:hover {
+  background-color: #f5f7fa;
 }
 
 

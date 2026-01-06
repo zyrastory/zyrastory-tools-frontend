@@ -9,7 +9,7 @@
       v-model="query.content"
       placeholder="搜尋內容"
       clearable
-      @keyup.enter="fetchMemes"
+      @keyup.enter="handleSearch"
     />
   </el-form-item>
 
@@ -30,7 +30,7 @@
 
 
   <el-form-item>
-    <el-button type="primary" @click="fetchMemes">
+    <el-button type="primary" @click="handleSearch">
       搜尋
     </el-button>
     <el-button @click="resetQuery">
@@ -103,6 +103,7 @@
 
 <script setup>
 import { ref, reactive, nextTick, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { Edit } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -164,6 +165,11 @@ const fetchMemes = async () => {
   }
 }
 
+const handleSearch = () => {
+  page.value = 1
+  fetchMemes()
+}
+
 const resetQuery = () =>{
   query.content = ''
   query.tags =['']
@@ -171,7 +177,14 @@ const resetQuery = () =>{
 }
 /*===== 查詢相關  end  =====*/
 
-onMounted(fetchMemes) //畫面init時先抓資料
+const route = useRoute()
+
+onMounted(() => {
+  if (route.query.tag) {
+    query.tags = route.query.tag
+  }
+  fetchMemes()
+})
 
 const startEdit = (row) => {
   editingId.value = row.id
