@@ -26,7 +26,7 @@
           <el-col :xs="24" :sm="8"  class="dashboard-col">
             <el-card>
               <el-statistic :value="stats.totalTags">
-                <template #title>Tag 總數(TODO)</template>
+                <template #title>Tag 總數</template>
               </el-statistic>
             </el-card>
           </el-col>
@@ -118,7 +118,8 @@ const fetchRankings = async () => {
   try {
     const response = await api.get('/admin/dashboard')
     rankings.value = response.data.tag_counts
-    stats.totalMemes = response.data.total_count
+    stats.totalMemes = response.data.meme_total_count
+    stats.totalTags = response.data.tags_total_count
     console.log(response.data)
   } catch (error) {
     console.error("無法取得tag_counts資料:", error)
