@@ -41,6 +41,31 @@
 
 
   <el-table :data="tableData" style="width: 100%">
+    <!-- 圖片 -->
+    <el-table-column label="圖片" width="120">
+      <template #default="{ row }">
+        <el-popover
+          v-if="row.image_url"
+          placement="right"
+          :width="300"
+          trigger="hover"
+        >
+          <template #reference>
+            <el-image
+              style="width: 80px; height: 80px"
+              :src="row.image_url"
+              fit="cover"
+            />
+          </template>
+          <el-image
+            :src="row.image_url"
+            style="width: 100%"
+            fit="contain"
+          />
+        </el-popover>
+        <span v-else>無圖片</span>
+      </template>
+    </el-table-column>
     <!-- Content 欄位 -->
     <el-table-column label="Content" min-width="220">
       <template #default="{ row }">
