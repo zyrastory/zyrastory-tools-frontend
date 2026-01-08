@@ -26,7 +26,18 @@
           <el-col :xs="24" :sm="8"  class="dashboard-col">
             <el-card>
               <el-statistic :value="stats.totalTags">
-                <template #title>Tag 總數</template>
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    Tag 總數
+                    <el-tooltip
+                      effect="dark"
+                      content="Tag僅統計超過10筆之資料"
+                      placement="top"
+                    >
+                    <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
+                  </el-tooltip>
+                  </div>
+                </template>
               </el-statistic>
             </el-card>
           </el-col>
@@ -213,5 +224,10 @@ const handleTagClick = (tagName) => {
 
 .mb-4 {
   margin-bottom: 16px;
+}
+
+
+.alert-icon {
+  margin-left: 4px;
 }
 </style>
