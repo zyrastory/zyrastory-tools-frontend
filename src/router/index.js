@@ -7,14 +7,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '',             // 外層用 Layout
-      component: DefaultLayout,
+      path: '/',
+      component: () => import('@/layouts/LandingLayout.vue'),
       children: [
         {
-          path: '',          // 注意這裡是空字串，代表 "/"
+          path: '',
           name: 'home',
           component: HomeView,
         },
+      ],
+    },
+    {
+      path: '/',             // 外層用 Layout
+      component: DefaultLayout,
+      children: [
+        // HomeView moved to LandingLayout above
         {
           path: 'about',
           name: 'about',
@@ -42,22 +49,22 @@ const router = createRouter({
           name: 'img_tools',
           redirect: '/img_tools/convert', //預設走第一頁
           component: () => import('@/views/ImgTools.vue'),
-           children: [
-              {
-                path: 'convert',
-                name: 'convert',
-                component: () => import('@/views/ImgConvert.vue'),
-              },
-              {
-                path: 'compress',
-                name: 'compress',
-                component: () => import('@/views/ImgCompress.vue'),
-              },
-              {
-                path: 'cropper',
-                name: 'cropper',
-                component: () => import('@/views/ImgCropper.vue'),
-              },
+          children: [
+            {
+              path: 'convert',
+              name: 'convert',
+              component: () => import('@/views/ImgConvert.vue'),
+            },
+            {
+              path: 'compress',
+              name: 'compress',
+              component: () => import('@/views/ImgCompress.vue'),
+            },
+            {
+              path: 'cropper',
+              name: 'cropper',
+              component: () => import('@/views/ImgCropper.vue'),
+            },
           ]
         },
       ],
@@ -83,7 +90,7 @@ const router = createRouter({
       redirect: '/admin/dashboard', // 導向獨立的 dashboard
       meta: { needLogin: true },
       children: [
-        
+
         {
           path: 'memes',
           name: 'admin-memes',
@@ -115,7 +122,7 @@ router.beforeEach(async (to, from, next) => {
   try {
     await api.get('/admin/me')
     next()
-  } catch(error) {
+  } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message || error.message;
 

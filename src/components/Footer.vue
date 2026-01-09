@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    &copy; Zyrastory 2025 All Rights Reserved.
+    &copy; Zyrastory 2025-2026 All Rights Reserved.
   </footer>
 </template>
 

@@ -19,36 +19,47 @@
   align-items: center;
   justify-content: center;
   gap: 5rem;
-  padding: 5px 1rem;
-
-  background: var(--color-navbar-bg, #6d5e5e);
+  padding: 0.8rem 2rem;
+  
+  /* Modern Glass Effect */
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 @media(max-width: 768px){
 	.navbar {
     gap: 2rem;
+    padding: 0.8rem 1rem;
   }
 }
 
 .navbar .logo {
-  width: 80px;
-  height: 80px;
+  width: 50px; /* Resize logo to be more subtle/modern */
+  height: 50px;
+  border-radius: 8px; /* Slight rounding */
 }
 
 .navbar a {
   text-decoration: none;
 
-  color: var(--color-navbar-text, #e9e6e4);
+  color: var(--vt-c-text-dark-2);
   font-weight: 500;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
 }
 
 .navbar a:hover {
-  color: var(--color-navbar-hover, #b1857b);
+  color: var(--color-primary);
 }
 
 .navbar a.router-link-exact-active {
-  color: var(--color-navbar-hover, #b1857b);
+  color: var(--color-primary);
   font-weight: 600;
 }
 </style>

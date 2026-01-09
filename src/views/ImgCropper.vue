@@ -38,7 +38,11 @@
 
         </div>
 
-        <el-button size="large" type="success" @click="uploadFiles">裁切圖片</el-button>
+
+
+        <button class="btn btn-primary" style="margin-top: 2rem; padding: 0.8rem 3rem;" @click="uploadFiles">
+          裁切圖片
+        </button>
         
         <br />
         <br />
@@ -158,7 +162,7 @@ function onFileChange(e) {
   justify-content: center;
 }
 .size-card.active {
-  border: 2px solid var(--el-color-primary);
+  border: 2px solid var(--color-primary);
 }
 .card-content {
   text-align: center;

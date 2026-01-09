@@ -7,17 +7,20 @@
   font-weight: normal;
 } */
 
-html  body {
+html body {
   margin: 0;
-  padding: 0;;
+  padding: 0;
+  ;
   width: 100%;
 
   overflow-y: scroll;
 }
 
 /* 隱藏scroll bar 但仍可下拉*/
-html::-webkit-scrollbar, body::-webkit-scrollbar {
-  width: 0px;  /* 對 WebKit/Chrome/Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0px;
+  /* 對 WebKit/Chrome/Safari */
   background: transparent;
 }
 
@@ -33,12 +36,54 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
   width: 80%;
 }
 
+/* Modern Utilities */
+.glass-panel {
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #fff 30%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  ;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
+}
+
 .card-light {
-  background: #f4f1ef; 
-  color: #555;
-  padding: 3rem 5rem; /* 前上下 後左右 */
+  /* Restore Light Card for Tool Visibility */
+  background: #f8f9fa;
+  color: #333;
+  /* Force dark text for legibility inside light cards */
+  padding: 3rem 5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
 
