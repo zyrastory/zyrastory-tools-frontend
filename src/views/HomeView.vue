@@ -17,6 +17,12 @@ const marqueeItems = Array.from({ length: 15 }, (_, i) => ({
     src: `https://placehold.co/300x200/222/888?text=Meme+${i+1}` 
 }));
 
+const handleLineJoin = () => {
+  const url = 'https://lin.ee/t2mKAPz';
+
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
+
 </script>
 
 <template>
@@ -36,7 +42,7 @@ const marqueeItems = Array.from({ length: 15 }, (_, i) => ({
             收錄 5,000+ 張精選梗圖，一秒搜尋直接分享。
           </p>
           <div class="hero-cta">
-            <button class="btn-primary" style="padding: 1rem 2rem; font-size: 1.2rem;">
+            <button class="btn-primary" style="padding: 1rem 2rem; font-size: 1.2rem;" @click="handleLineJoin"> 
                前往 LINE 加入好友
             </button>
             <p class="cta-hint">或 掃描右下角 QR Code</p>
@@ -69,7 +75,7 @@ const marqueeItems = Array.from({ length: 15 }, (_, i) => ({
 
             <!-- Corner QR Code -->
             <div class="hero-corner-qr glass-panel">
-               <img src="@/assets/logo.jpg" alt="QR Code" class="corner-qr-img" />
+               <img src="@/assets/line_gainfriends.png" alt="QR Code" class="corner-qr-img" />
                <p class="corner-qr-label">Scan Me</p>
             </div>
 
