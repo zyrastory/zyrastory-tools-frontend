@@ -461,18 +461,37 @@ const handleLineJoin = () => {
     font-size: 2.5rem;
   }
   
-  .hero-visual {
+  .hero-visual-stats {
     width: 100%;
-    margin-top: 2rem;
-  }
-  
-  .qr-container {
-    width: 250px;
-    height: 300px;
-  }
-  
-  .stats-container {
+    margin-top: 4rem;
+    height: auto; /* Allow content to stack */
+    display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .stat-card-hero {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100%;
+    max-width: 300px;
+    transform: none !important;
+  }
+
+  .hero-corner-qr {
+    position: relative !important;
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 200px;
+    background: rgba(15, 15, 15, 0.9);
   }
 }
 </style>
