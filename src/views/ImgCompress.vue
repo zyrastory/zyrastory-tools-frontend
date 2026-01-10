@@ -1,6 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
+  import { ElMessage } from 'element-plus'
 
 
   import { useHead } from '@vueuse/head'
@@ -25,20 +26,20 @@
     const files = fileInput.value.files
 
     if(files.length === 0){
-      alert('請選擇圖片上傳');
+      ElMessage.warning('請選擇圖片上傳');
       return;
     }
     else if (files.length > 5) {
-      alert('最多只能上傳 5 張圖片');
+      ElMessage.warning('最多只能上傳 5 張圖片');
       return;
     }
     for (let file of files) {
       if(!file.type.startsWith('image/')){
-        alert('禁止傳入非圖片類型檔案');
+        ElMessage.error('禁止傳入非圖片類型檔案');
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        alert('圖片 ${file.name} 太大，必須小於 5 MB');
+        ElMessage.error(`圖片 ${file.name} 太大，必須小於 5 MB`);
         return; 
       }
        formData.append('upload_files', file) 
@@ -51,11 +52,13 @@
     loading.value = true;
     try {
       const response = await axios.post('/api/tools/image_tool/upload', formData)
-      loading.value = false;
       imageRes.value = response.data;
 
     } catch (error) {
       console.error(error)
+      ElMessage.error('上傳失敗，請稍後再試')
+    } finally {
+      loading.value = false;
     }
 
 
