@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar">
-    <img src="@/assets/logo.jpg" alt="Logo" class="logo" />
+    <RouterLink to="/" class="logo-link">
+      <img src="@/assets/logo.jpg" alt="Logo" class="logo" />
+    </RouterLink>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/about">About</RouterLink>
     <!-- <RouterLink to="/img_convert">圖片工具</RouterLink>

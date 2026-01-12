@@ -1,6 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useHead } from '@vueuse/head';
+
+useHead({
+  title: '梗圖傳送門 - 你的對話不再冷場',
+  meta: [
+    { name: 'description', content: '優雅、快速、免費。收錄 5,000+ 張精選梗圖，一秒搜尋直接分享。' },
+    { property: 'og:title', content: '梗圖傳送門' },
+    { property: 'og:description', content: '優雅、快速、免費。收錄 5,000+ 張精選梗圖，一秒搜尋直接分享。' },
+    // Google Search Console veficiation or other tags can go here
+  ]
+});
 
 
 // Feature Stats (Hardcoded for instant load)
