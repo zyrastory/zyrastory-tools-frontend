@@ -2,6 +2,7 @@
 import router from '@/router'
 import api from '@/api'
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 const form = ref({
   username: '',
@@ -11,10 +12,13 @@ const form = ref({
 const loading = ref(false)
 const error = ref(null)
 
+const userStore = useUserStore()
+
 const doLogin = async () => {
   loading.value = true
   try {
-    await api.post('/admin/login', form.value)
+    const response = await api.post('/admin/login', form.value)
+    userStore.setUser(response.data.user)
     router.push('/admin')
 
   } catch (e) {

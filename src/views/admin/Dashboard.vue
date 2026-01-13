@@ -114,7 +114,9 @@
 <script setup lang="ts">
 import api from '@/api'
 import { reactive, ref, computed, onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
 
 const stats = reactive({
   totalMemes: 1280,

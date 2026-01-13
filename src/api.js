@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
+import { useUserStore } from '@/stores/user'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE,
@@ -19,6 +20,11 @@ api.interceptors.response.use(
       const requestUrl = error.config?.url || '';
 
       if (requestUrl.includes('/admin/')) {
+
+        //清除pinia狀態
+        const userStore = useUserStore()
+        userStore.clearUser()
+
         if (!isRedirecting) {
           isRedirecting = true;
           ElMessage.error('權限已過期，請重新登入');
