@@ -44,8 +44,52 @@
 
           <el-col :xs="24" :sm="8"  class="dashboard-col">
             <el-card>
-              <el-statistic :value="stats.todayCalls">
-                <template #title>今日呼叫次數(TODO)</template>
+              <el-statistic :value="0">
+                <template #title>今日人數(TODO)</template>
+              </el-statistic>
+            </el-card>
+          </el-col>
+        </el-row>
+        
+        <!-- 第二排：今日數據(比例) + 累計 -->
+        <el-row :gutter="16" class="mb-4">
+          <el-col :xs="24" :sm="12" class="dashboard-col">
+            <el-card class="today-data-card">
+              <div class="card-header">
+                <span>今日數據</span>
+                 <el-tooltip
+                    effect="dark"
+                    content="今日提供圖片 / 今日呼叫次數"
+                    placement="top"
+                  >
+                    <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
+                  </el-tooltip>
+              </div>
+              <div class="stat-ratio-container">
+                 <div class="stat-ratio">
+                    <span class="stat-numerator">{{ stats.todayImages }}</span>
+                    <span class="stat-divider">/</span>
+                    <span class="stat-denominator">{{ stats.todayCalls }}</span>
+                  </div>
+              </div>
+            </el-card>
+          </el-col>
+          
+          <el-col :xs="24" :sm="12" class="dashboard-col">
+            <el-card>
+              <el-statistic :value="stats.totalImagesServed">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    <span>累計提供圖片數</span>
+                    <el-tooltip
+                      effect="dark"
+                      content="不包含預設圖片（找不到時的隨機圖）"
+                      placement="top"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-circle-info" class="alert-icon"/> 
+                    </el-tooltip>
+                  </div>
+                </template>
               </el-statistic>
             </el-card>
           </el-col>
@@ -96,13 +140,35 @@
           <el-col :xs="24" :md="12" class="dashboard-col">
             <el-card>
               <template #header>
-                <span>熱門關鍵字(TODO)</span>
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <span>熱門關鍵字（累計至今）</span>
+                  <el-text type="info" size="small">Top 20</el-text>
+                </div>
               </template>
 
-              <el-table :data="hotKeywords" size="small">
-                <el-table-column prop="keyword" label="關鍵字" />
-                <el-table-column prop="count" label="呼叫次數" width="120" />
-              </el-table>
+              <el-carousel
+                height="500px"
+                indicator-position="outside"
+                :autoplay="false"
+                trigger="click"
+              >
+                <el-carousel-item
+                  v-for="(page, index) in paginatedHotKeywords"
+                  :key="index"
+                >
+                  <div class="tag-count-cards">
+                    <div
+                      v-for="keyword in page"
+                      class="tag-count-card"
+                      @click="handleTagClick(keyword.keyword)"
+                    >
+                      <div class="seq">{{ keyword.seq }}</div>
+                      <div class="tag-name">{{ keyword.keyword }}</div>
+                      <div class="tag-count">{{ keyword.count }} 次</div>
+                    </div>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
             </el-card>
           </el-col>
       </el-row>
@@ -115,13 +181,16 @@
 import api from '@/api'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 
 const stats = reactive({
-  totalMemes: 1280,
-  totalTags: 100,
-  todayCalls: '15,000', // 之後接 Redis
+  totalMemes: 0,
+  totalTags: 0,
+  todayCalls: 0,
+  todayImages: 0,
+  totalImagesServed: 0,
 })
 
 const rankings = ref([])
@@ -133,6 +202,11 @@ const fetchRankings = async () => {
     rankings.value = response.data.tag_counts
     stats.totalMemes = response.data.meme_total_count
     stats.totalTags = response.data.tags_total_count
+    // 新增：統計數據
+    stats.todayCalls = response.data.today_calls
+    stats.todayImages = response.data.today_images
+    stats.totalImagesServed = response.data.total_images_served
+    hotKeywords.value = response.data.hot_keywords
     console.log(response.data)
   } catch (error) {
     console.error("無法取得tag_counts資料:", error)
@@ -141,7 +215,8 @@ const fetchRankings = async () => {
 
 // 一進來先呼叫這個
 onMounted(() => {
-  fetchRankings()
+  fetchRankings()  // 合併後只需要一次 API 呼叫
+  ElMessage.success(`歡迎回到山洞，${userStore.displayName}`)
 })
 
 const tagCountsWithSeq = computed(() => {
@@ -160,12 +235,22 @@ const paginatedTagCounts = computed(() => {
   return result
 })
 
+const hotKeywords = ref([])
 
-const hotKeywords = [
-  { keyword: '貓', count: 231 },
-  { keyword: '崩潰', count: 198 },
-  { keyword: '海綿寶寶', count: 165 },
-]
+const hotKeywordsWithSeq = computed(() => {
+  return hotKeywords.value.map((item, index) => ({
+    ...item,
+    seq: index + 1
+  }))
+})
+
+const paginatedHotKeywords = computed(() => {
+  const result = []
+  for (let i = 0; i < hotKeywordsWithSeq.value.length; i += itemsPerPage) {
+    result.push(hotKeywordsWithSeq.value.slice(i, i + itemsPerPage))
+  }
+  return result
+})
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -180,12 +265,49 @@ const handleTagClick = (tagName) => {
 
 <style scoped>
 .statistic-card {
-  height: 100%;
+  /* Remove height: 100% here as it might cause issues, control card heights via detailed classes */
   border-radius: 4px;
 }
 .middle-card {
   height: 100%;
   border-radius: 4px;
+}
+/* Force equal height for all stat cards in the grid */
+.dashboard-col .el-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Ensure el-statistic content is centered vertically if needed, or consistent padding */
+.el-statistic {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Custom card style override to match el-statistic default */
+.today-data-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+}
+
+/* Unify font size: Element Plus default is around 20-24px depending on theme, force 28px for all */
+:deep(.el-statistic__content) {
+  font-size: 28px !important;
+  font-weight: 500;
+}
+
+.stat-ratio {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start; /* Align left to match standard stats */
+  font-size: 28px; /* Match the forced size */
+  font-weight: 500;
 }
 
 .dashboard-page {
@@ -231,5 +353,76 @@ const handleTagClick = (tagName) => {
 
 .alert-icon {
   margin-left: 4px;
+}
+
+.today-data-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Removed duplicate definitions, controlled by .dashboard-col .el-card above but specific padding adjustments */
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  color: var(--el-text-color-regular);
+  font-size: 12px;
+  line-height: 20px;
+  margin-bottom: 4px;
+}
+
+.stat-ratio-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  /* justify-content: center;  Let it align left or center? element numeric usually left but ratio looks better centered or left? 
+     User said "Today Data" card. 
+     Element statistic numbers are usually left aligned. 
+     I'll keep it left aligned or consistent with others. 
+     Actually, "stat-ratio" has justify-content: center in existing CSS.
+  */
+}
+
+.stat-ratio {
+  display: flex;
+  align-items: baseline;
+  /* justify-content: center; Changed to match standard left alignment or kept if user liked it? 
+     User said "I like the font size". 
+     Standard el-statistic aligns left. 
+     I will try to align content consistently.
+  */
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.stat-numerator {
+  color: var(--el-color-primary);
+}
+
+.stat-divider {
+  margin: 0 8px;
+  color: var(--el-text-color-secondary);
+  font-size: 24px;
+}
+
+.stat-denominator {
+  color: var(--el-text-color-regular);
+}
+
+.seq {
+  font-weight: bold;
+  color: var(--el-color-primary);
+  margin-right: 12px;
+  min-width: 24px;
+}
+
+.tag-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.tag-count {
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
 }
 </style>

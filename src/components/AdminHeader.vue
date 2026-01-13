@@ -12,7 +12,7 @@
 
     <div class="header-right">
       <!-- 預留右上角使用者資訊 -->
-      <span class="username">使用者名稱(TODO)</span>
+      <!-- <span class="username">{{ userStore.displayName }}</span> -->
     </div>
   </el-header>
 </template>

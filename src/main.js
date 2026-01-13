@@ -12,19 +12,23 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Solid icons
 import { faSpinner, faCircleDown, faDownload, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-import { createPinia } from 'pinia';
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 // 加進 library
 library.add(faSpinner, faCircleDown, faDownload, faCircleInfo)
-
 
 const app = createApp(App)
 const head = createHead()
 
 // 全域註冊元件
 app.component('font-awesome-icon', FontAwesomeIcon)
+
 app.use(router)
 app.use(head)
-app.use(createPinia())
+app.use(pinia)
 
 app.mount('#app')
