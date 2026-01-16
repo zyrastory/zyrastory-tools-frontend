@@ -101,7 +101,17 @@
           <el-col :xs="24" :md="12" class="dashboard-col">
             <el-card>
               <template #header>
-                <span> Redis Tag 對應數量</span>
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <span>Redis Tag 對應數量</span>
+                  <el-button
+                    :icon="Refresh"
+                    :loading="refreshing"
+                    size="small"
+                    @click="refreshRedisCache"
+                  >
+                    重新整理快取
+                  </el-button>
+                </div>
               </template>
 
               <!-- <el-table :data="tagCounts" size="small">
@@ -182,6 +192,7 @@ import api from '@/api'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
+import { Refresh } from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
 
@@ -195,6 +206,7 @@ const stats = reactive({
 
 const rankings = ref([])
 const itemsPerPage = 10
+const refreshing = ref(false)
 
 const fetchRankings = async () => {
   try {
@@ -254,6 +266,25 @@ const paginatedHotKeywords = computed(() => {
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
+
+const refreshRedisCache = async () => {
+  refreshing.value = true
+  try {
+    const response = await api.post('/admin/refresh-cache')
+    if (response.data.status === 'success') {
+      ElMessage.success(response.data.message || 'Redis 快取已更新')
+      // 重新載入 dashboard 資料
+      await fetchRankings()
+    } else {
+      ElMessage.error(response.data.message || '更新失敗')
+    }
+  } catch (error) {
+    console.error('Failed to refresh cache:', error)
+    ElMessage.error('更新失敗，請稍後再試')
+  } finally {
+    refreshing.value = false
+  }
+}
 
 const handleTagClick = (tagName) => {
   router.push({ 
