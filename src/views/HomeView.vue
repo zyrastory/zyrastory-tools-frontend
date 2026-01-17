@@ -21,11 +21,11 @@ const stats = ref([
   { label: '分類總數', value: '150+', icon: '🏷️' },
 ]);
 
-// Mock data for Marquee
-const marqueeItems = Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    // Using placeholders for now
-    src: `https://placehold.co/300x200/222/888?text=Meme+${i+1}` 
+// 幻燈片圖片 (R2 + 版本號控制快取)
+const VERSION = 'v1'; // 更新圖片時改這個值即可
+const marqueeItems = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  src: `https://img.zyrastory.com/home-slider/${i + 1}.jpeg?v=${VERSION}`
 }));
 
 const handleLineJoin = () => {
@@ -337,6 +337,7 @@ const handleLineJoin = () => {
 .marquee-item img {
   height: 200px;
   width: auto;
+  object-fit: cover; /* 確保不同比例的圖片都能正常顯示 */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.3s;
