@@ -133,12 +133,18 @@
                       <div
                         v-for="detail in page"
                         class="tag-count-card"
+                        :class="{ 'inconsistent': !detail.is_consistent }"
                         @click="handleTagClick(detail.tag_name)"
                       >
                         <div class="seq">{{ detail.seq }}</div>
                         <div class="tag-name">{{ detail.tag_name }}</div>
-                        <div class="tag-count">{{ detail.count }} 張</div>
-                        
+                        <div class="tag-count-wrapper">
+                          <div class="tag-count">{{ detail.set_count }} 張</div>
+                          <div v-if="!detail.is_consistent" class="inconsistent-badge">
+                            ⚠️ {{ detail.difference > 0 ? '+' : '' }}{{ detail.difference }}
+                          </div>
+                          <div v-else class="consistent-badge">✅</div>
+                        </div>
                       </div>
                     </div>
                   </el-carousel-item>
@@ -205,6 +211,7 @@ const stats = reactive({
 })
 
 const rankings = ref([])
+const redisInspections = ref([])
 const itemsPerPage = 10
 const refreshing = ref(false)
 
@@ -220,8 +227,20 @@ const fetchRankings = async () => {
     stats.totalImagesServed = response.data.total_images_served
     hotKeywords.value = response.data.hot_keywords
     console.log(response.data)
+    
+    // 新增：取得 Redis 一致性檢查資料
+    await fetchRedisInspection()
   } catch (error) {
     console.error("無法取得tag_counts資料:", error)
+  }
+}
+
+const fetchRedisInspection = async () => {
+  try {
+    const response = await api.get('/admin/redis/inspect')
+    redisInspections.value = response.data.inspections
+  } catch (error) {
+    console.error("無法取得 Redis 檢查資料:", error)
   }
 }
 
@@ -232,10 +251,18 @@ onMounted(() => {
 })
 
 const tagCountsWithSeq = computed(() => {
-  return rankings.value.map((item, index) => ({
-    ...item,
-    seq: index + 1
-  }))
+  return rankings.value.map((item, index) => {
+    // 找到對應的 Redis 檢查結果
+    const inspection = redisInspections.value.find(i => i.tag_name === item.tag_name)
+    
+    return {
+      ...item,
+      seq: index + 1,
+      is_consistent: inspection?.is_consistent ?? true,
+      difference: inspection?.difference ?? 0,
+      set_count: inspection?.set_count ?? item.count
+    }
+  })
 })
 
 
@@ -452,8 +479,33 @@ const handleTagClick = (tagName) => {
   font-weight: 500;
 }
 
+.tag-count-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .tag-count {
   color: var(--el-text-color-secondary);
   font-size: 14px;
+}
+
+.consistent-badge {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.inconsistent-badge {
+  color: var(--el-color-danger);
+  font-size: 12px;
+  font-weight: 600;
+  background-color: rgba(245, 108, 108, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tag-count-card.inconsistent {
+  background-color: rgba(245, 108, 108, 0.05);
+  border-left: 3px solid var(--el-color-warning);
 }
 </style>

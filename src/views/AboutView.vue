@@ -3,6 +3,19 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const isMobile = ref(false)
 
+const versionData = ref([
+  {
+    version: 'v2.0',
+    feature: '梗圖傳送門官方頁面',
+    note: 'Line官方帳號上線囉'
+  },
+  {
+    version: 'v1.0',
+    feature: '線上圖片轉換、壓縮、裁切功能',
+    note: '子網域誕生囉!!'
+  }
+])
+
 function checkMobile() {
   isMobile.value = window.innerWidth<768;
 }
@@ -33,11 +46,11 @@ onBeforeUnmount(() => {
 
         <el-card class="mb-4">
           <h2>網站版本資訊</h2>
-          <el-descriptions border :column="isMobile ? 1 : 3">
-            <el-descriptions-item label="版本">v1.0</el-descriptions-item>
-            <el-descriptions-item label="功能">線上圖片轉換、壓縮、裁切功能</el-descriptions-item>
-            <el-descriptions-item label="備註">子網域誕生囉!!</el-descriptions-item>
-          </el-descriptions>
+          <el-table :data="versionData" border stripe style="width: 100%">
+            <el-table-column prop="version" label="版本" width="120" />
+            <el-table-column prop="feature" label="功能" />
+            <el-table-column prop="note" label="備註" />
+          </el-table>
         </el-card>
 
         <el-card class="mb-4">
