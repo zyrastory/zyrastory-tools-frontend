@@ -152,6 +152,42 @@
             </el-card>
           </el-col>
 
+          <!-- DB Tag 對應數量 -->
+          <el-col :xs="24" :md="12" class="dashboard-col">
+            <el-card>
+              <template #header>
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <span>DB Tag 對應數量</span>
+                  <el-text type="info" size="small">來自資料庫</el-text>
+                </div>
+              </template>
+
+              <el-carousel
+                height="500px"
+                indicator-position="outside"
+                :autoplay="false"
+                trigger="click"
+              >
+                <el-carousel-item
+                  v-for="(page, index) in paginatedDbTags"
+                  :key="index"
+                >
+                  <div class="tag-count-cards">
+                    <div
+                      v-for="tag in page"
+                      class="tag-count-card"
+                      @click="handleTagClick(tag.tag_name)"
+                    >
+                      <div class="seq">{{ tag.seq }}</div>
+                      <div class="tag-name">{{ tag.tag_name }}</div>
+                      <div class="tag-count">{{ tag.count }} 張</div>
+                    </div>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </el-card>
+          </el-col>
+
           <!-- 熱門關鍵字 -->
           <el-col :xs="24" :md="12" class="dashboard-col">
             <el-card>
@@ -212,6 +248,7 @@ const stats = reactive({
 
 const rankings = ref([])
 const redisInspections = ref([])
+const dbTags = ref([])
 const itemsPerPage = 10
 const refreshing = ref(false)
 
@@ -226,6 +263,8 @@ const fetchRankings = async () => {
     stats.todayImages = response.data.today_images
     stats.totalImagesServed = response.data.total_images_served
     hotKeywords.value = response.data.hot_keywords
+    // 新增：從 dashboard 一併取得 DB Tag 統計
+    dbTags.value = response.data.db_tag_counts || []
     console.log(response.data)
     
     // 新增：取得 Redis 一致性檢查資料
@@ -287,6 +326,21 @@ const paginatedHotKeywords = computed(() => {
   const result = []
   for (let i = 0; i < hotKeywordsWithSeq.value.length; i += itemsPerPage) {
     result.push(hotKeywordsWithSeq.value.slice(i, i + itemsPerPage))
+  }
+  return result
+})
+
+const dbTagsWithSeq = computed(() => {
+  return dbTags.value.map((item, index) => ({
+    ...item,
+    seq: index + 1
+  }))
+})
+
+const paginatedDbTags = computed(() => {
+  const result = []
+  for (let i = 0; i < dbTagsWithSeq.value.length; i += itemsPerPage) {
+    result.push(dbTagsWithSeq.value.slice(i, i + itemsPerPage))
   }
   return result
 })
