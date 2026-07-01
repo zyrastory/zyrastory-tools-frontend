@@ -233,10 +233,12 @@
 import api from '@/api'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useTagStore } from '@/stores/tag'
 import { ElMessage } from 'element-plus'
 import { Refresh } from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
+const tagStore = useTagStore()
 
 const stats = reactive({
   totalMemes: 0,
@@ -266,6 +268,9 @@ const fetchRankings = async () => {
     // 新增：從 dashboard 一併取得 DB Tag 統計
     dbTags.value = response.data.db_tag_counts || []
     console.log(response.data)
+
+    // 將全部 tag 寫入全域 store，供其他頁面使用
+    tagStore.setTagsFromDbCounts(response.data.db_tag_counts)
     
     // 新增：取得 Redis 一致性檢查資料
     await fetchRedisInspection()

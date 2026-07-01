@@ -47,7 +47,7 @@
         <el-popover
           v-if="row.image_url"
           placement="right"
-          :width="300"
+          :width="450"
           trigger="hover"
         >
           <template #reference>
@@ -98,9 +98,50 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="tags" width="200">
+    <!-- Tags 欄位 -->
+    <el-table-column label="Tags" min-width="220">
       <template #default="{ row }">
-        <span>{{ row.tags }}</span>
+        <!-- 顯示模式 -->
+        <div
+          v-if="editingTagsId !== row.id"
+          class="editable-cell"
+          @click="startTagEdit(row)"
+        >
+          <template v-if="row.tags && row.tags.length">
+            <el-tag
+              v-for="tag in row.tags"
+              :key="tag"
+              size="small"
+              style="margin: 2px;"
+            >{{ tag }}</el-tag>
+          </template>
+          <span v-else class="no-tags">無標籤</span>
+          <el-icon :size="16" class="edit-icon"><Edit /></el-icon>
+        </div>
+
+        <!-- 編輯模式 -->
+        <div v-else class="editing-cell">
+          <el-select
+            v-model="editTagsForm.tags"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="輸入後按 Enter 新增"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="tag in allTagOptions"
+              :key="tag"
+              :label="tag"
+              :value="tag"
+            />
+          </el-select>
+          <div class="edit-actions">
+            <el-button size="small" type="primary" @click="saveTags(row)">儲存</el-button>
+            <el-button size="small" @click="cancelTagEdit">取消</el-button>
+          </div>
+        </div>
       </template>
     </el-table-column>
     <!-- 啟用狀態 -->
@@ -127,12 +168,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Edit } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { useTagStore } from '@/stores/tag'
 
 import api from '@/api'
+
+const tagStore = useTagStore()
 
 /* ===== 分頁 ===== */
 const tableData = ref([])
@@ -140,10 +184,16 @@ const page = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
-/* ===== 編輯 ===== */
+/* ===== Content 編輯 ===== */
 const editingId = ref(null)
 const editInputRef = ref(null)
 const editForm = ref({ content: '' })
+
+/* ===== Tags 編輯 ===== */
+const editingTagsId = ref(null)
+const editTagsForm = ref({ tags: [] })
+// 全域 tag 選項（從 Pinia store 取得）
+const allTagOptions = computed(() => tagStore.allTags)
 
 /*===== 查詢相關 start =====*/
 const query = reactive({
@@ -208,6 +258,8 @@ onMounted(() => {
   if (route.query.tag) {
     query.tags = route.query.tag
   }
+  // 如果沒經過 Dashboard，全域 tag store 可能是空的，fallback 呼叫 API
+  tagStore.fetchTagsIfEmpty()
   fetchMemes()
 })
 
@@ -220,6 +272,29 @@ const startEdit = (row) => {
 const cancelEdit = () => {
   editingId.value = null
   editForm.value.content = ''
+}
+
+const startTagEdit = (row) => {
+  editingTagsId.value = row.id
+  editTagsForm.value.tags = row.tags ? [...row.tags] : []
+}
+
+const cancelTagEdit = () => {
+  editingTagsId.value = null
+  editTagsForm.value.tags = []
+}
+
+const saveTags = async (row) => {
+  try {
+    // 空陣列代表清空標籤，傳 null 讓後端存 null
+    const newTags = editTagsForm.value.tags.length > 0 ? editTagsForm.value.tags : null
+    await api.patch(`/admin/memes/${row.id}`, { tags: newTags })
+    row.tags = newTags ?? []
+    editingTagsId.value = null
+    ElMessage.success('標籤已更新')
+  } catch {
+    ElMessage.error('標籤更新失敗')
+  }
 }
 
 const saveEdit = async (row) => {
@@ -261,7 +336,12 @@ const updateStatus = async (row) => {
 
 /* 給關鍵字查詢框 clear icon 空間  TODO 測試失敗*/
 .fixed-clear-input .el-input__wrapper {
-  padding-right: 32px; 
+  padding-right: 32px;
+}
+
+.no-tags {
+  color: #c0c4cc;
+  font-size: 12px;
 }
 
 
